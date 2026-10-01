@@ -1,6 +1,6 @@
 ---
 name: tailscale-recipes
-description: Plain-English recipes for everyday Tailscale tasks on a few personal Macs, with a safety tier on every command. Use when someone wants to route their traffic through a home computer on hotel or plane wifi, send a file to their phone or another Mac, help fix a family member's Mac over SSH, finish setting up a new Mac remotely, open a site running on their laptop from their phone, share a local site publicly for a demo, check whether another machine is online or why it's slow, or let agents on different machines ask each other for help. A community skill for Tailscale, not made by or affiliated with Tailscale Inc.
+description: Plain-English recipes for everyday Tailscale tasks on a few personal Macs, with a safety tier on every command. Use when someone wants to route their traffic through a home computer on hotel or plane wifi, send a file to their phone or another Mac, help fix a family member's Mac over SSH, finish setting up a new Mac remotely, open a site running on their laptop from their phone, share a local site publicly for a demo, check whether another machine is online or why it's slow, let agents on different machines ask each other for help, check every machine at once, see another Mac's screen, check on agents from a phone, share a folder between Macs, reach a home printer or network drive while away, give a contractor access to one Mac, or set up one-word shortcuts into another Mac. A community skill for Tailscale, not made by or affiliated with Tailscale Inc.
 license: MIT
 ---
 
@@ -16,13 +16,13 @@ Talk to the user in plain English. Define tailnet, exit node, SSH, and relay the
 
 Every command in the recipes is labeled with one of these. Follow the tier even when the user sounds sure.
 
-**Run freely.** Read-only: `tailscale status`, `ping`, `netcheck`, `ip`, `whois`, `whoami`, `version`, `get`, `exit-node list`, `exit-node suggest`, `serve status`, `funnel status`, `file cp --targets`, and `file get` into a folder the user named.
+**Run freely.** Read-only: `tailscale status` (including `--json`), `ping`, `netcheck`, `ip`, `whois`, `whoami`, `version` (including `--upstream`), `get`, `dns status`, `exit-node list`, `exit-node suggest`, `serve status`, `funnel status`, `file cp --targets`, `file get` into a folder the user named, and `scripts/check-all-macs.py`. Also the look-only helpers the recipes use: `nc -z` port checks, `ssh -G`, `ippfind`, `lpstat`, `who`, `tmux ls`, and `defaults read`.
 
-**Ask first.** Show the exact command and wait for a yes: set or clear an exit node, send a file, `serve`, SSH into the user's own machine.
+**Ask first.** Show the exact command and wait for a yes: set or clear an exit node, send a file, `serve`, SSH into the user's own machine, offer or stop offering a home network range (`--advertise-routes`), add or remove a printer, add an SSH key, edit `~/.ssh/config` or `~/.zshrc`, and switch Taildrive's hidden setting on or off.
 
-**Ask first and name the risk.** Show the command, say the risk in one sentence, then wait for a yes: `funnel` (public internet), `down` or `logout`, anything on another person's device, and anything that could cut the connection you're using. If you reach this machine over SSH or Tailscale, changing its exit node or running `down` can lock you out.
+**Ask first and name the risk.** Show the command, say the risk in one sentence, then wait for a yes: `funnel` (public internet), `down` or `logout`, turning on Remote Login or Screen Sharing, giving anyone else a way into the user's Mac, anything on another person's device, and anything that could cut the connection you're using. If you reach this machine over SSH or Tailscale, changing its exit node or running `down` can lock you out.
 
-**Never.** Create or delete auth keys, edit access rules or the policy file, add or remove users, touch the admin console, or turn off key expiry. When a recipe needs one of these, tell the user what to click and let them do it.
+**Never.** Create or delete auth keys, edit access rules or the policy file, add or remove users, touch the admin console, or turn off key expiry. When a recipe needs one of these, such as approving a route, sharing a machine, adding Taildrive rules, or turning off key expiry, tell the user what to click and let them do it.
 
 Show the undo next to every change, before you run it.
 
@@ -60,3 +60,10 @@ Which Mac app it is matters. If `/Applications/Tailscale.app/Contents/_MASReceip
 - [public-demo.md](references/public-demo.md): share a local site publicly for a demo, then turn it off.
 - [is-it-online.md](references/is-it-online.md): is my other Mac online, and why is it slow?
 - [agents-talk.md](references/agents-talk.md): let agents on different machines ask each other for help.
+- [check-all-macs.md](references/check-all-macs.md): check every device at once, with how it's connected and when its sign-in expires.
+- [see-the-screen.md](references/see-the-screen.md): see and control your home Mac's screen with Screen Sharing.
+- [agents-from-phone.md](references/agents-from-phone.md): check on an agent running on your home Mac from your phone.
+- [shared-folders.md](references/shared-folders.md): share a folder between your Macs with Taildrive, and when Dropbox is the better fit.
+- [home-network.md](references/home-network.md): reach your home printer, network drive, or router page from anywhere.
+- [contractor-access.md](references/contractor-access.md): give a contractor access to one Mac, then take it away.
+- [one-word-shortcuts.md](references/one-word-shortcuts.md): type one word to get into another Mac.
