@@ -1,10 +1,12 @@
 ---
-name: tailscale-recipes
+name: tailscale-superpowers
 description: Plain-English recipes for everyday Tailscale tasks on a few personal Macs, with a safety tier on every command. Use when someone wants to route their traffic through a home computer on hotel or plane wifi, send a file to their phone or another Mac, help fix a family member's Mac over SSH, finish setting up a new Mac remotely, open a site running on their laptop from their phone, share a local site publicly for a demo, check whether another machine is online or why it's slow, let agents on different machines ask each other for help, check every machine at once, see another Mac's screen, check on agents from a phone, share a folder between Macs, reach a home printer or network drive while away, give a contractor access to one Mac, or set up one-word shortcuts into another Mac. A community skill for Tailscale, not made by or affiliated with Tailscale Inc.
 license: MIT
 ---
 
-# Tailscale Recipes
+# Tailscale Superpowers
+
+For your agents.
 
 A community skill for Tailscale. It isn't made by, affiliated with, or endorsed by Tailscale Inc.
 
