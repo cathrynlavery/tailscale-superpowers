@@ -57,6 +57,14 @@ To check another Mac, run the same command over SSH (ask first, it's SSH into yo
 
 ## When a sign-in is about to expire
 
+With `tailscale-pp-cli` set up (see [SKILL.md](../SKILL.md)), the same warning comes straight from Tailscale's admin API, for every device on the tailnet, including ones this Mac's `tailscale status` doesn't list (run freely):
+
+```sh
+tailscale-pp-cli devices expiry --within 30
+```
+
+Add `--include-keys` to also see auth keys and API access tokens that are about to run out.
+
 The agent's job is the warning. Either fix belongs to the user:
 
 - **Sign in again before the date.** On that device, the user signs in again in the Tailscale app. With the CLI it's `tailscale up --force-reauth`, which is ask first and name the risk: "This disconnects the device until you finish signing in, so don't run it over SSH or Tailscale."

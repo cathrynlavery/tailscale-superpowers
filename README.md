@@ -29,6 +29,7 @@ Once it's installed, say things like:
 - "Give my contractor access to the Mac mini, just for this week."
 - "Set it up so I can type `mini` to get into the Mac mini."
 - "Put this link on my partner's clipboard." (With their OK.)
+- "Approve the exit node on the Mac mini." (With the optional admin CLI.)
 
 ## What's inside
 
@@ -77,7 +78,9 @@ Every command in every recipe has one of four tiers:
 - **Run freely**: read-only commands like `tailscale status` and `tailscale ping`.
 - **Ask first**: the agent shows you the exact command and waits for a yes. Setting an exit node, sending a file, sharing a site on your tailnet, SSH into your own Mac.
 - **Ask first and name the risk**: the agent also tells you the risk in one sentence. Making a site public, disconnecting, turning on Remote Login or Screen Sharing, giving someone else a way into your Mac, anything on someone else's device, anything that could cut the agent's own connection.
-- **Never**: auth keys, access rules, the policy file, users, the admin console, key expiry. When a recipe needs one of these, such as approving a route or sharing a Mac with a contractor, the agent tells you what to click and you do it.
+- **Never**: auth keys, hand-editing the policy file, users, the admin console, key expiry. When a recipe needs one of these, such as sharing a Mac with a contractor, the agent tells you what to click and you do it.
+
+The exception is the optional admin CLI below. Approving a route, adding a Taildrive rule, and revoking a pending share can go through `tailscale-pp-cli`, which shows a plan first and changes nothing until you say yes.
 
 Every change comes with its undo, shown before the change runs. The full rules are at the top of [SKILL.md](skills/tailscale-superpowers/SKILL.md).
 
@@ -99,6 +102,18 @@ The skill is the `skills/tailscale-superpowers` folder. It follows the [Agent Sk
 
 <!-- TODO(Cathryn): add the one-line install once it's tested: npx skills add <owner>/tailscale-superpowers -->
 
+## Optional: let your agent do the admin steps
+
+Some recipes end with "now click this in the admin console", like approving a route or adding a Taildrive rule. If you install [tailscale-pp-cli](https://github.com/mvanhorn/printing-press-library/tree/main/library/cloud/tailscale), a CLI I published to the Printing Press library, your agent can do those steps itself. Every change shows a plan first and waits for your yes.
+
+```sh
+npx -y @mvanhorn/printing-press-library install tailscale
+```
+
+It needs an API access token, which you create in the admin console under Settings, Keys. Give it a short expiry. Like this skill, it's a community project, not made by Tailscale.
+
+## If `tailscale` isn't found
+
 If Terminal says `tailscale: command not found`, that's normal on a Mac. The command lives inside the Tailscale app and isn't on your PATH, both in the App Store version and in the version from tailscale.com until you install its command line tool from the app's settings. The skill's first step finds it and explains the fix, so you don't need to sort this out first.
 
 ## Going deeper
@@ -108,6 +123,7 @@ This skill sticks to everyday use. For configuration, access rules, and admin wo
 - [tailscale/tailscale-skill](https://github.com/tailscale/tailscale-skill): Tailscale's official agent skill, a public alpha. Start here for deeper configuration questions.
 - [Tailscale docs MCP server](https://tailscale.com/docs/develop-with-ai): lets your agent search Tailscale's documentation.
 - [Aperture by Tailscale](https://tailscale.com/docs/aperture/what-is-aperture): Tailscale's AI agent for the machines in your tailnet.
+- [tailscale-pp-cli](https://github.com/mvanhorn/printing-press-library/tree/main/library/cloud/tailscale): the admin CLI this skill can use, with plan-first route approvals, policy entries with backups, and fleet-wide key expiry.
 - [YawLabs/tailscale-mcp](https://github.com/YawLabs/tailscale-mcp): a third-party MCP server with 97 admin API tools.
 - [Tailscale documentation](https://tailscale.com/docs)
 

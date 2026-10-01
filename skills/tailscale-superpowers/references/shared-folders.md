@@ -32,7 +32,7 @@ tailscale status --json | python3 -c 'import json,sys; c=json.load(sys.stdin)["S
 
 ## One-time: allow it in the policy file
 
-The user does this in the admin console. The agent never edits the policy file. It's ask first and name the risk: "These rules let devices on your tailnet read and write each other's shared folders."
+The user does this in the admin console, or the agent does it with `tailscale-pp-cli` (see below). The agent never edits the policy file by hand. Either way it's ask first and name the risk: "These rules let devices on your tailnet read and write each other's shared folders."
 
 On the **Access controls** page, the user adds these two blocks from Tailscale's Taildrive docs. If the file already has a `nodeAttrs` or `grants` section, the entries go inside the existing one:
 
@@ -66,6 +66,17 @@ On the **Access controls** page, the user adds these two blocks from Tailscale's
 As written, every device on the tailnet can read and write every share. That's fine when the tailnet is only you. If other people are on it, ask Tailscale's official skill or docs for a narrower rule first.
 
 Undo: the user removes those entries.
+
+With `tailscale-pp-cli` set up (see [SKILL.md](../SKILL.md)), the agent can add the same two entries. See what would change first (run freely):
+
+```sh
+tailscale-pp-cli policy add-entry nodeAttrs --entry '{"target":["autogroup:member"],"attr":["drive:share","drive:access"]}'
+tailscale-pp-cli policy add-entry grants --entry '{"src":["*"],"dst":["*"],"app":{"tailscale.com/cap/drive":[{"shares":["*"],"access":"rw"}]}}'
+```
+
+Each one prints the lines it would add and whether Tailscale accepts the result. Then ask first, name the risk, and run each again with `--yes`. Comments in the policy file stay as they are, and each write saves a backup first.
+
+Undo with the CLI: `tailscale-pp-cli policy restore --list` (run freely) lists the backups, newest first. Restore the one taken before the first change, asking first and naming the risk: `tailscale-pp-cli policy restore <backup-id> --yes`. That puts the whole file back as it was, so read the diff it shows for anything someone else changed since.
 
 ## One-time: show the hidden setting on the sharing Mac
 
