@@ -34,6 +34,16 @@ A few words first:
 
 3. Approve it. The user does this in the admin console: on the Machines page, find the home Mac (it shows a **Subnets** badge), open its menu, choose **Edit route settings**, turn on the range, and save.
 
+   With `tailscale-pp-cli` set up (see [SKILL.md](../SKILL.md)), the agent can approve it instead. See the plan first (run freely):
+
+   ```sh
+   tailscale-pp-cli routes approve home-mac 192.168.1.0/24
+   ```
+
+   Then ask first and name the risk: "This lets your other devices reach everything on your home network through the home Mac." Run the same command with `--yes`. Any route the home Mac already had approved stays approved.
+
+   Undo (ask first and name the risk: "Anything reaching your home network through the home Mac stops working."): `tailscale-pp-cli routes unapprove home-mac 192.168.1.0/24 --yes`
+
 4. Keep the home Mac awake. See [travel-wifi.md](travel-wifi.md), "One-time setup at home".
 
 Check what the home Mac is offering (run freely): `tailscale get advertise-routes`. An empty line means nothing.
@@ -91,11 +101,11 @@ The `interface:` line shows `utun` and a number, which means the traffic goes th
 
 - To stop offering the range, ask first: `tailscale set --advertise-routes=`
 - To remove the printer, ask first: `lpadmin -x Home_Printer`. Or select it in Printers & Scanners and click the minus button.
-- The user can also turn the route off in the admin console, in the same **Edit route settings** screen.
+- The user can also turn the route off in the admin console, in the same **Edit route settings** screen. With `tailscale-pp-cli`, ask first and name the same risk: `tailscale-pp-cli routes unapprove home-mac 192.168.1.0/24 --yes`
 
 ## When it goes wrong
 
-- **Nothing at home answers**: the route isn't approved yet, or the home Mac is asleep or offline. Run `tailscale ping home-mac`.
+- **Nothing at home answers**: the route isn't approved yet, or the home Mac is asleep or offline. Run `tailscale ping home-mac`. With `tailscale-pp-cli`, `tailscale-pp-cli routes overview --pending` (run freely) lists routes still waiting for approval.
 - **The printer doesn't appear in the printer list**: expected. Add it by address.
 - **The printer worked before and now doesn't**: it got a new address. Find it again with `ippfind` and `ping`, and reserve the address in the router.
 - **Odd behavior on someone else's network**: if the network you're on uses the same range as your home (`192.168.1.x` and `192.168.0.x` are very common), the addresses clash. Moving your home router to a less common range avoids it. That's a router setting, so the user does it.

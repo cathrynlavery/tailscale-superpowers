@@ -1,6 +1,6 @@
 ---
 name: tailscale-superpowers
-description: Pro Tailscale workflows for every device you own, written for a few personal Macs, with a safety tier on every command. Use when someone wants to route their traffic through a home computer on hotel or plane wifi, send a file to their phone or another Mac, help fix a family member's Mac over SSH, finish setting up a new Mac remotely, open a site running on their laptop from their phone, share a local site publicly for a demo, check whether another machine is online or why it's slow, let agents on different machines ask each other for help, check every machine at once, see another Mac's screen, check on agents from a phone, share a folder between Macs, reach a home printer or network drive while away, give a contractor access to one Mac, set up one-word shortcuts into another Mac, or put text on another Mac's clipboard. A community skill for Tailscale, not made by or affiliated with Tailscale Inc.
+description: Pro Tailscale workflows for every device you own, written for a few personal Macs, with a safety tier on every command. Use when someone wants to route their traffic through a home computer on hotel or plane wifi, send a file to their phone or another Mac, help fix a family member's Mac over SSH, finish setting up a new Mac remotely, open a site running on their laptop from their phone, share a local site publicly for a demo, check whether another machine is online or why it's slow, let agents on different machines ask each other for help, check every machine at once, see another Mac's screen, check on agents from a phone, share a folder between Macs, reach a home printer or network drive while away, give a contractor access to one Mac, set up one-word shortcuts into another Mac, or put text on another Mac's clipboard. With the optional tailscale-pp-cli admin CLI it can also approve a route or exit node, add a Taildrive rule, check sign-in expiry for every device, and revoke a pending share. A community skill for Tailscale, not made by or affiliated with Tailscale Inc.
 license: MIT
 ---
 
@@ -10,7 +10,7 @@ Pro Tailscale workflows for every device you own.
 
 A community skill for Tailscale. It isn't made by, affiliated with, or endorsed by Tailscale Inc.
 
-These recipes cover everyday jobs for people who run AI agents on a few Macs. For admin work such as access rules, the policy file, users, or auth keys, point the user to Tailscale's official skill: https://github.com/tailscale/tailscale-skill
+These recipes cover everyday jobs for people who run AI agents on a few Macs. A few of them need an admin step, like approving a route or adding a Taildrive rule. If the user has set up `tailscale-pp-cli` (see "Optional: the admin CLI" below), the agent can do those steps, with a plan first. Otherwise the user does them in the admin console. For other admin work, such as users or auth keys, point the user to Tailscale's official skill: https://github.com/tailscale/tailscale-skill
 
 Talk to the user in plain English. Define tailnet, exit node, SSH, and relay the first time you use them. Use example names like home-mac, laptop, and phone, never real device names in anything you write down.
 
@@ -18,13 +18,13 @@ Talk to the user in plain English. Define tailnet, exit node, SSH, and relay the
 
 Every command in the recipes is labeled with one of these. Follow the tier even when the user sounds sure.
 
-**Run freely.** Read-only: `tailscale status` (including `--json`), `ping`, `netcheck`, `ip`, `whois`, `whoami`, `version` (including `--upstream`), `get`, `dns status`, `exit-node list`, `exit-node suggest`, `serve status`, `funnel status`, `file cp --targets`, `file get` into a folder the user named, and `scripts/check-all-macs.py`. Also the look-only helpers the recipes use: `nc -z` port checks, `ssh -G`, `ippfind`, `lpstat`, `who`, `tmux ls`, and `defaults read`.
+**Run freely.** Read-only: `tailscale status` (including `--json`), `ping`, `netcheck`, `ip`, `whois`, `whoami`, `version` (including `--upstream`), `get`, `dns status`, `exit-node list`, `exit-node suggest`, `serve status`, `funnel status`, `file cp --targets`, `file get` into a folder the user named, and `scripts/check-all-macs.py`. Also the look-only helpers the recipes use: `nc -z` port checks, `ssh -G`, `ippfind`, `lpstat`, `who`, `tmux ls`, and `defaults read`. From `tailscale-pp-cli`: `doctor`, `devices expiry`, `devices inspect`, `routes overview`, `shares audit`, `access check`, `policy restore --list`, and the write commands below when run without `--yes`, which only print a plan.
 
 **Ask first.** Show the exact command and wait for a yes: set or clear an exit node, send a file, `serve`, SSH into the user's own machine, offer or stop offering a home network range (`--advertise-routes`), add or remove a printer, add an SSH key, edit `~/.ssh/config` or `~/.zshrc`, and switch Taildrive's hidden setting on or off.
 
-**Ask first and name the risk.** Show the command, say the risk in one sentence, then wait for a yes: `funnel` (public internet), `down` or `logout`, turning on Remote Login or Screen Sharing, giving anyone else a way into the user's Mac, anything on another person's device, and anything that could cut the connection you're using. If you reach this machine over SSH or Tailscale, changing its exit node or running `down` can lock you out.
+**Ask first and name the risk.** Show the command, say the risk in one sentence, then wait for a yes: `funnel` (public internet), `down` or `logout`, turning on Remote Login or Screen Sharing, giving anyone else a way into the user's Mac, anything on another person's device, and anything that could cut the connection you're using. If you reach this machine over SSH or Tailscale, changing its exit node or running `down` can lock you out. From `tailscale-pp-cli`, any of these with `--yes`: `routes approve`, `routes unapprove`, `shares revoke`, `policy add-entry`, and `policy restore`. Run the command without `--yes` first, show the user the plan, say the risk, then run it again with `--yes`.
 
-**Never.** Create or delete auth keys, edit access rules or the policy file, add or remove users, touch the admin console, or turn off key expiry. When a recipe needs one of these, such as approving a route, sharing a machine, adding Taildrive rules, or turning off key expiry, tell the user what to click and let them do it.
+**Never.** Create or delete auth keys, edit the policy file by hand, add or remove users, touch the admin console, or turn off key expiry. Don't use `tailscale-pp-cli`'s raw admin API commands either, such as `tailnet acl set`, `tailnet keys create`, `users delete`, or `device delete`. Use only the plan-first commands listed in the tiers above. When a recipe needs something from this list, such as sharing a machine or turning off key expiry, tell the user what to click and let them do it.
 
 Show the undo next to every change, before you run it.
 
@@ -51,6 +51,30 @@ What to tell the user, depending on what you found:
 - **Nowhere.** Tailscale isn't installed. See [new-mac-setup.md](references/new-mac-setup.md).
 
 Which Mac app it is matters. If `/Applications/Tailscale.app/Contents/_MASReceipt` exists, it's the Mac App Store version. That version can't run `tailscale ssh`, and Apple's sandbox limits which files it can send.
+
+## Optional: the admin CLI
+
+`tailscale-pp-cli` is a separate, open-source command-line tool for Tailscale's admin API, published in the [Printing Press library](https://github.com/mvanhorn/printing-press-library/tree/main/library/cloud/tailscale). It isn't made by Tailscale either. With it, the agent can approve a route or exit node, add a Taildrive rule, check sign-in expiry for every device, and revoke a pending share, with a plan before anything changes.
+
+Check whether it's installed (run freely): `command -v tailscale-pp-cli`.
+
+To install it, ask first:
+
+```sh
+npx -y @mvanhorn/printing-press-library install tailscale
+```
+
+That installs the CLI and its own agent skill. Without Node, `go install github.com/mvanhorn/printing-press-library/library/cloud/tailscale/cmd/tailscale-pp-cli@latest` works too.
+
+It needs an API access token. The user creates one in the admin console under **Settings**, **Keys**, **Generate access token**, and puts it in their environment as `TAILSCALE_API_KEY`. The agent never creates the token. A short expiry is fine, and a day covers a one-off job. Check it works (run freely): `tailscale-pp-cli doctor`.
+
+How it stays safe:
+
+- Every write command prints a plan and changes nothing until you add `--yes`.
+- Approving or removing a route keeps every other route the device already has.
+- A policy change is checked by Tailscale first, saved as a local backup, shown as a diff, and refused if someone else changed the policy in between.
+
+`self` means this machine. No CLI, or no token? Use the admin console steps in each recipe.
 
 ## Recipes
 

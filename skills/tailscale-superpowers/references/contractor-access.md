@@ -52,7 +52,7 @@ Send the contractor that name and their account's username. Send the password se
 
 ## Optional: limit what they can reach
 
-With Tailscale's default rules, the contractor can reach every service on that Mac, including ones you didn't mean to share. Tailscale's access rules can narrow that using `autogroup:shared`. That means editing the policy file, so the user does it, starting from Tailscale's sharing docs or its official skill.
+With Tailscale's default rules, the contractor can reach every service on that Mac, including ones you didn't mean to share. Tailscale's access rules can narrow that using `autogroup:shared`. That means editing the policy file, so the user does it, starting from Tailscale's sharing docs or its official skill. With `tailscale-pp-cli` set up, you can check which rules let them reach the Mac (run freely): `tailscale-pp-cli access check --to agent-mini:22 --from <their-login>`.
 
 ## While they work
 
@@ -77,6 +77,8 @@ The contractor connects with `ssh contractor@agent-mini.your-tailnet.ts.net` or 
 Do all of these on the same day:
 
 1. **Revoke the share.** The user does this in the admin console: on the Machines page, open **Share** for that Mac, then the invite's menu, then **Revoke invite**.
+
+   With `tailscale-pp-cli` set up, list every invite on that Mac and who accepted it (run freely): `tailscale-pp-cli shares audit --device agent-mini`. Invites nobody accepted can go through the CLI: `tailscale-pp-cli shares revoke --device agent-mini --pending` shows what it would delete (run freely), and adding `--yes` deletes them (ask first and name the risk: "Those invite links stop working."). For the invite the contractor accepted, use the admin console as above, then run `shares audit` again to confirm it's gone.
 2. **Take their account off** the Remote Login and Screen Sharing lists.
 3. **Delete their Mac account** in System Settings, **Users & Groups**. macOS offers to keep their home folder as a disk image, which helps if you want to look over their work later.
 4. **Check** with `who` that they're gone (run freely).
