@@ -1,10 +1,16 @@
+<p align="center">
+  <img src="assets/hero.jpg" alt="Tailscale Superpowers: plain-English recipes for your AI agents. A pen-and-ink drawing of a small superhero with a dot-grid body and a coral-red cape, standing on a Mac mini and holding up a cable wired to a laptop." width="100%">
+</p>
+
 # Tailscale Superpowers
 
-For your agents. A community skill for Tailscale. It gives your AI agent plain-English recipes for the everyday things you'd use Tailscale for, with a safety tier on every command.
+For your agents.
 
-This is an independent project. It isn't made by, affiliated with, or endorsed by Tailscale Inc.
+Plain-English Tailscale recipes for people who run AI agents on a few Macs. Your agent gets the exact commands for everyday jobs, like safe hotel wifi, printing at home from anywhere, or letting a contractor into one Mac, plus clear rules about what it may do without asking you.
 
-## Why this exists
+This is an independent, community-made skill. It isn't made by, affiliated with, or endorsed by Tailscale Inc.
+
+## Why I made this
 
 I run AI agents on a few Macs, and Tailscale is what ties them together. The official Tailscale tools are written for engineers configuring networks. I wanted recipes for the everyday stuff, written so my agent can explain each step to me, with clear limits on what it's allowed to touch.
 
@@ -12,29 +18,57 @@ The one I use most:
 
 > Hotel/airplane wifi sketchy or slow? I route all my traffic through my house in Austin with one tap.
 
+## Ask in plain words
+
+Once it's installed, you can say things like:
+
+- "The hotel wifi is sketchy. Route me through my home Mac."
+- "Send this PDF to my phone."
+- "Is the Mac mini online? Why is it so slow?"
+- "I want to print on the printer at home from here."
+- "Give my contractor access to the Mac mini, just for this week."
+- "Set it up so I can type `mini` to get into the Mac mini."
+
 ## What's inside
+
+Fifteen recipes. Each one covers when you'd want it, the exact commands, what success looks like, how to undo it, and what the common errors mean.
+
+**Away from home**
 
 | Recipe | What it does |
 | --- | --- |
 | [Travel wifi](skills/tailscale-superpowers/references/travel-wifi.md) | Send all your traffic through your home Mac when the wifi is sketchy |
-| [Send a file](skills/tailscale-superpowers/references/send-a-file.md) | Send a file to your phone or another Mac with Taildrop |
-| [Help a family member's Mac](skills/tailscale-superpowers/references/help-family-mac.md) | Fix their Mac over SSH, with their consent and every change approved |
-| [New Mac setup](skills/tailscale-superpowers/references/new-mac-setup.md) | Install Tailscale on a new Mac, then let an agent finish the setup |
-| [Open a laptop site on your phone](skills/tailscale-superpowers/references/open-site-on-phone.md) | Share a local site with your own devices only |
-| [Public demo](skills/tailscale-superpowers/references/public-demo.md) | Put a local site on the internet for a demo, then turn it off |
-| [Is it online? Why is it slow?](skills/tailscale-superpowers/references/is-it-online.md) | Check status, direct vs relayed connections, and your network |
-| [Agents talking to agents](skills/tailscale-superpowers/references/agents-talk.md) | A pointer to Agent Tincan |
-| [Check on all your Macs](skills/tailscale-superpowers/references/check-all-macs.md) | A read-only script lists every device, how it's connected, and when its sign-in expires |
+| [Home printer and network drive](skills/tailscale-superpowers/references/home-network.md) | Reach devices at home that can't run Tailscale, from anywhere |
 | [See the screen](skills/tailscale-superpowers/references/see-the-screen.md) | Use your home Mac's screen from your laptop with Screen Sharing |
 | [Agents from your phone](skills/tailscale-superpowers/references/agents-from-phone.md) | Check on an agent running on your home Mac from your phone |
+
+**Moving things around**
+
+| Recipe | What it does |
+| --- | --- |
+| [Send a file](skills/tailscale-superpowers/references/send-a-file.md) | Send a file to your phone or another Mac with Taildrop |
 | [Shared folders](skills/tailscale-superpowers/references/shared-folders.md) | Share a folder between your Macs with Taildrive, and when Dropbox is the better fit |
-| [Home printer and network drive](skills/tailscale-superpowers/references/home-network.md) | Reach devices at home that can't run Tailscale, from anywhere |
-| [Contractor access](skills/tailscale-superpowers/references/contractor-access.md) | Give someone access to one Mac, then take it away |
+| [Open a laptop site on your phone](skills/tailscale-superpowers/references/open-site-on-phone.md) | Share a local site with your own devices only |
+| [Public demo](skills/tailscale-superpowers/references/public-demo.md) | Put a local site on the internet for a demo, then turn it off |
+
+**Running your Macs**
+
+| Recipe | What it does |
+| --- | --- |
+| [Check on all your Macs](skills/tailscale-superpowers/references/check-all-macs.md) | A read-only script lists every device, how it's connected, and when its sign-in expires |
+| [Is it online? Why is it slow?](skills/tailscale-superpowers/references/is-it-online.md) | Check status, direct vs relayed connections, and your network |
+| [New Mac setup](skills/tailscale-superpowers/references/new-mac-setup.md) | Install Tailscale on a new Mac, then let an agent finish the setup |
 | [One-word shortcuts](skills/tailscale-superpowers/references/one-word-shortcuts.md) | Type one word to get into another Mac |
+| [Agents talking to agents](skills/tailscale-superpowers/references/agents-talk.md) | A pointer to Agent Tincan |
 
-Each recipe covers when you'd want it, the exact commands, what success looks like, how to undo it, and what the common errors mean.
+**Letting people in**
 
-## Safety tiers
+| Recipe | What it does |
+| --- | --- |
+| [Contractor access](skills/tailscale-superpowers/references/contractor-access.md) | Give someone access to one Mac, then take it away |
+| [Help a family member's Mac](skills/tailscale-superpowers/references/help-family-mac.md) | Fix their Mac over SSH, with their consent and every change approved |
+
+## How it keeps your agent in line
 
 Every command in every recipe has one of four tiers:
 
@@ -45,9 +79,9 @@ Every command in every recipe has one of four tiers:
 
 Every change comes with its undo, shown before the change runs. The full rules are at the top of [SKILL.md](skills/tailscale-superpowers/SKILL.md).
 
-## "tailscale: command not found"
+## Tested on a real network
 
-On a Mac, the `tailscale` command lives inside the Tailscale app and isn't on your PATH. That's true of the App Store version, and of the version from tailscale.com until you install its command line tool from the app's settings. The skill's first step finds it and explains the fix, so you don't need to sort this out before installing.
+Before release, the recipes were run against a real tailnet with Tailscale 1.102.4 on macOS 27. Files went between Macs, a site was served privately and then made public, an exit node was switched on and off, and a home printer and router answered from a Mac outside the home network. Where a test showed the docs were out of date, the recipe now says what actually happens. Steps that need a phone or a second person's Tailscale account weren't run, and Taildrive was switched on and checked but no folder was opened from a second Mac yet.
 
 ## Install
 
@@ -61,9 +95,9 @@ The skill is the `skills/tailscale-superpowers` folder. It follows the [Agent Sk
 | Pi | `~/.agents/skills/` |
 | Hermes | `~/.hermes/skills/` |
 
-<!-- TODO(Cathryn): once this is on GitHub, add the one-line install: npx skills add <owner>/tailscale-superpowers -->
+<!-- TODO(Cathryn): add the one-line install once it's tested: npx skills add <owner>/tailscale-superpowers -->
 
-Then ask your agent something like "the hotel wifi here is sketchy, can you route me through my home Mac?"
+If Terminal says `tailscale: command not found`, that's normal on a Mac. The command lives inside the Tailscale app and isn't on your PATH, both in the App Store version and in the version from tailscale.com until you install its command line tool from the app's settings. The skill's first step finds it and explains the fix, so you don't need to sort this out first.
 
 ## Sharing a clipboard between machines
 
@@ -80,8 +114,6 @@ This skill sticks to everyday use. For configuration, access rules, and admin wo
 - [Aperture by Tailscale](https://tailscale.com/docs/aperture/what-is-aperture): Tailscale's AI agent for the machines in your tailnet.
 - [YawLabs/tailscale-mcp](https://github.com/YawLabs/tailscale-mcp): a third-party MCP server with 97 admin API tools.
 - [Tailscale documentation](https://tailscale.com/docs)
-
-The commands here were last checked against Tailscale 1.102.4 on macOS.
 
 ## License
 
