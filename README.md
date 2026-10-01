@@ -8,7 +8,7 @@ Pro Tailscale workflows for every device you own.
 
 A skill for the AI agents on your Macs. Your agent gets the exact commands for everyday jobs, like safe hotel wifi, printing at home from anywhere, or letting a contractor into one Mac, plus clear rules about what it may do without asking you.
 
-This is an independent, community-made skill. It isn't made by, affiliated with, or endorsed by Tailscale Inc.
+Made by Cathryn Lavery at [LittleMight](https://littlemight.com). This is an independent, community-made skill. It isn't made by, affiliated with, or endorsed by Tailscale Inc.
 
 ## Why I made this
 
