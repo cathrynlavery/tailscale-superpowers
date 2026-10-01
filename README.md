@@ -28,10 +28,11 @@ Once it's installed, say things like:
 - "I want to print on the printer at home from here."
 - "Give my contractor access to the Mac mini, just for this week."
 - "Set it up so I can type `mini` to get into the Mac mini."
+- "Put this link on my partner's clipboard." (With their OK.)
 
 ## What's inside
 
-Fifteen recipes. Each one covers when you'd want it, the exact commands, what success looks like, how to undo it, and what the common errors mean.
+Sixteen recipes. Each one covers when you'd want it, the exact commands, what success looks like, how to undo it, and what the common errors mean.
 
 **Away from home**
 
@@ -48,6 +49,7 @@ Fifteen recipes. Each one covers when you'd want it, the exact commands, what su
 | --- | --- |
 | [Send a file](skills/tailscale-superpowers/references/send-a-file.md) | Send a file to your phone or another Mac with Taildrop |
 | [Shared folders](skills/tailscale-superpowers/references/shared-folders.md) | Share a folder between your Macs with Taildrive, and when Dropbox is the better fit |
+| [Paste on another Mac](skills/tailscale-superpowers/references/paste-to-another-mac.md) | Put text on another Mac's clipboard with one command |
 | [Open a laptop site on your phone](skills/tailscale-superpowers/references/open-site-on-phone.md) | Share a local site with your own devices only |
 | [Public demo](skills/tailscale-superpowers/references/public-demo.md) | Put a local site on the internet for a demo, then turn it off |
 
@@ -98,12 +100,6 @@ The skill is the `skills/tailscale-superpowers` folder. It follows the [Agent Sk
 <!-- TODO(Cathryn): add the one-line install once it's tested: npx skills add <owner>/tailscale-superpowers -->
 
 If Terminal says `tailscale: command not found`, that's normal on a Mac. The command lives inside the Tailscale app and isn't on your PATH, both in the App Store version and in the version from tailscale.com until you install its command line tool from the app's settings. The skill's first step finds it and explains the fix, so you don't need to sort this out first.
-
-## Sharing a clipboard between machines
-
-Tailscale has no built-in clipboard sync, so there's no recipe for it.
-
-<!-- TODO(Cathryn): add the tool you use to share a clipboard between your Macs. -->
 
 ## Going deeper
 
