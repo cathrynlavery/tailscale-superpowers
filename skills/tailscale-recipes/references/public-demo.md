@@ -16,7 +16,7 @@ Every Funnel change is ask first and name the risk. The risk sentence: "Anyone o
 - Funnel is a beta feature. It needs MagicDNS (Tailscale's naming), HTTPS certificates, and permission in your tailnet's policy file. If any of these are missing, the first `funnel` command prints a link to approve. The user opens it. The agent never edits the policy file or the admin console.
 - Turning on HTTPS publishes your device names and tailnet name in a public certificate log. If a device name is private, rename the device first.
 - Check the site has nothing private in it: no admin pages, no real customer data, no keys or passwords in the page.
-- Funnel only works on ports 443, 8443, and 10000.
+- Funnel only works on ports 443, 8443, and 10000. Tailscale 1.102 accepts other ports without an error and even lists them as `(Funnel on)`, but nobody outside can reach them.
 
 ## Steps
 
@@ -74,8 +74,8 @@ The Mac App Store and Standalone apps can put a site running on this computer on
 
 ## When it goes wrong
 
-- **`port ... is not allowed for funnel`**: use 443, 8443, or 10000.
+- **Status says `(Funnel on)` but nobody outside can open it**: check the port. Only 443, 8443, and 10000 work, even though the CLI accepts others. Turn that port off (`tailscale funnel --https=<port> off`) and use 8443.
 - **It printed a link and is waiting**: Funnel or HTTPS isn't turned on for your tailnet yet. The user opens the link and approves it.
-- **It works for you but not for them**: give it up to 10 minutes after the first time. Then check they have the exact address, including `:8443`.
+- **It works for you but not for them**: give it up to 10 minutes after the first time. If they opened the link before it was live, their network may remember "not found" for a while longer, so have them try on a phone with wifi off. Then check they have the exact address, including `:8443`.
 - **`Warning: funnel=on for ..., but no serve config`**: Funnel is on for a port with nothing behind it. Run the undo for that port.
 - **Something you didn't mean to share is public**: it was on the same port. Run the undo now, then share the demo again on a port with nothing else on it.

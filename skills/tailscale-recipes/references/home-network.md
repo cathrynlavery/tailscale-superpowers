@@ -85,7 +85,7 @@ Away from home, on your laptop, run freely:
 route -n get 192.168.1.50
 ```
 
-The `interface:` line shows `utun` and a number, which means the traffic goes through Tailscale. `ping -c 3 192.168.1.50` gets replies, and a test page comes out of the printer at home.
+The `interface:` line shows `utun` and a number, which means the traffic goes through Tailscale. At home it shows your normal connection, like `en0`, because the laptop reaches the printer directly. Both are right. `ping -c 3 192.168.1.50` gets replies, and a test page comes out of the printer at home.
 
 ## Undo
 

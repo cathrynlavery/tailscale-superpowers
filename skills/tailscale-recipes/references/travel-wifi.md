@@ -39,6 +39,8 @@ An agent on the home Mac can do step 1 instead (ask first): `tailscale set --adv
 
 3. If the wifi has a login page, log in now, before the next step.
 
+   Also check whether local network access is on. Run freely: `tailscale get exit-node-allow-lan-access`. It can already be `true`, which means traffic to devices on this wifi skips the exit node. On wifi you don't trust, turn it off. Ask first: `tailscale set --exit-node-allow-lan-access=false`. Undo: the same command with `=true`.
+
 4. Turn it on. Ask first, and show the undo (`tailscale set --exit-node=`) at the same time:
 
    ```sh
@@ -77,4 +79,4 @@ Check it worked (run freely): `tailscale get exit-node` prints an empty line whe
 - **The internet stops working right after you turn it on**: the home Mac fell asleep, lost power, or the home internet is down. Run the undo, then `tailscale ping home-mac` to see if it's back.
 - **The wifi login page won't load**: turn the exit node off, log in to the wifi, then turn it back on.
 - **Everything is slow**: your traffic now goes home and back, so your home upload speed sets the limit. `tailscale ping home-mac` showing `via DERP(...)` on every reply means you're on a relay, which is slower still. See [is-it-online.md](is-it-online.md).
-- **You can't reach a printer or TV on the local network**: that's the exit node sending everything home. Ask first, then run `tailscale set --exit-node-allow-lan-access=true` to let this device reach the local network directly. On wifi you don't trust, leave it off. Undo: `tailscale set --exit-node-allow-lan-access=false`. Check the current value (run freely) with `tailscale get exit-node-allow-lan-access`.
+- **You can't reach a printer or TV on the local network**: that's the exit node sending everything home, with local network access off. Ask first, then run `tailscale set --exit-node-allow-lan-access=true` to let this device reach the local network directly. On wifi you don't trust, leave it off. Undo: `tailscale set --exit-node-allow-lan-access=false`. Check the current value (run freely) with `tailscale get exit-node-allow-lan-access`.

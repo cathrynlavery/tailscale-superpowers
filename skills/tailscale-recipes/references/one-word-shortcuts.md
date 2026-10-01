@@ -66,7 +66,9 @@ Check it, without connecting (run freely):
 ssh -G mini | grep -E '^(hostname|user) '
 ```
 
-It prints `user your-username` and `hostname agent-mini`. Now `ssh mini` works, for you and for agents.
+It prints `user your-username` and `hostname agent-mini`.
+
+The first time anyone connects with the new name, SSH asks `Are you sure you want to continue connecting`. That saves the other Mac's identity so SSH can warn you if it ever changes. An agent can't answer the question, so the user runs `ssh mini` once in their own Terminal and types `yes`. After that, `ssh mini` works for you and for agents.
 
 Undo: delete those three lines from `~/.ssh/config`.
 
@@ -119,6 +121,7 @@ In a new Terminal window, `mini` puts you at the other Mac's prompt with no pass
 
 - **`zsh: command not found: mini`**: that Terminal window was open before you added the alias. Open a new one.
 - **It still asks for a password**: the key didn't get copied. Run `ssh-copy-id` again.
+- **`Host key verification failed`** when an agent runs it: nobody has accepted the other Mac's identity under this name yet. The user runs `ssh mini` once in their own Terminal and types `yes`.
 - **`Could not resolve hostname agent-mini`**: use the name exactly as `tailscale status` shows it.
 - **`Bad configuration option`**: a typo in `~/.ssh/config`. The error names the line.
 - **`open terminal failed: not a terminal`**: the alias is missing `-t`.

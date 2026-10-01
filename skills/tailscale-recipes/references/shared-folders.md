@@ -97,7 +97,7 @@ Undo (ask first): `defaults delete io.tailscale.ipn.macos FileSharingConfigurati
 
 The user does this in the app. A Mac has no CLI command for it.
 
-1. Open Tailscale's **Settings**, then **File Sharing**.
+1. Open Tailscale's **Settings** from the menu bar icon, then the **File Sharing** tab. It should say "Taildrive folder sharing is enabled for this Mac."
 2. Click the plus button and pick the folder. The share is named after the folder. Double-click a name to rename it.
 
 Share only the folder you need, not your whole home folder.
@@ -114,7 +114,7 @@ The user does this in Finder:
 
 Folders are arranged by tailnet, then device, then share, like `your-tailnet/home-mac/footage`.
 
-Tailscale says phones can open shares too. Its Taildrive docs have the details.
+On an iPhone or iPad, make sure the Tailscale app is connected, then open the Files app and turn on Tailscale there to browse the shares.
 
 ## What success looks like
 
@@ -131,5 +131,6 @@ A Finder window with the shared folder's files. Open a file, change it, save it,
 
 - **The check prints `False`**: the policy file entries are missing or don't cover this device.
 - **No File Sharing in Settings**: the hidden setting isn't on, or Tailscale wasn't reopened after switching it on.
+- **`Taildrive CLI commands are not supported when using the macOS GUI app`**: expected on a Mac. Share folders from Tailscale's Settings window instead.
 - **Finder can't connect to `100.100.100.100:8080`**: Tailscale is off on this Mac, or this device doesn't have `access: True`.
 - **The share is missing or slow**: the sharing Mac is asleep or on a relay. See [is-it-online.md](is-it-online.md).
