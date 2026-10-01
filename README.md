@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="assets/hero.jpg" alt="Tailscale Superpowers: plain-English recipes for your AI agents. A pen-and-ink drawing of a small superhero with a dot-grid body and a coral-red cape, standing on a Mac mini and holding up a cable wired to a laptop." width="100%">
+  <img src="assets/hero.jpg" alt="Tailscale Superpowers: Pro Tailscale workflows for every device you own. A pen-and-ink drawing of a small superhero with a dot-grid body and a coral-red cape, standing on a Mac mini and holding up a cable wired to a laptop." width="100%">
 </p>
 
 # Tailscale Superpowers
 
-For your agents.
+Pro Tailscale workflows for every device you own.
 
-Plain-English Tailscale recipes for people who run AI agents on a few Macs. Your agent gets the exact commands for everyday jobs, like safe hotel wifi, printing at home from anywhere, or letting a contractor into one Mac, plus clear rules about what it may do without asking you.
+A skill for the AI agents on your Macs. Your agent gets the exact commands for everyday jobs, like safe hotel wifi, printing at home from anywhere, or letting a contractor into one Mac, plus clear rules about what it may do without asking you.
 
 This is an independent, community-made skill. It isn't made by, affiliated with, or endorsed by Tailscale Inc.
 
@@ -18,9 +18,9 @@ The one I use most:
 
 > Hotel/airplane wifi sketchy or slow? I route all my traffic through my house in Austin with one tap.
 
-## Ask in plain words
+## What you can ask
 
-Once it's installed, you can say things like:
+Once it's installed, say things like:
 
 - "The hotel wifi is sketchy. Route me through my home Mac."
 - "Send this PDF to my phone."
