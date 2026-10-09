@@ -1,6 +1,6 @@
 ---
 name: tailscale-superpowers
-description: Pro Tailscale workflows for every device you own, written for a few personal Macs, with a safety tier on every command. Use when someone wants to route their traffic through a home computer on hotel or plane wifi, send a file to their phone or another Mac, help fix a family member's Mac over SSH, finish setting up a new Mac remotely, open a site running on their laptop from their phone, share a local site publicly for a demo, check whether another machine is online or why it's slow, let agents on different machines ask each other for help, check every machine at once, see another Mac's screen, check on agents from a phone, share a folder between Macs, reach a home printer or network drive while away, give a contractor access to one Mac, set up one-word shortcuts into another Mac, or put text on another Mac's clipboard. With the optional tailscale-pp-cli admin CLI it can also approve a route or exit node, add a Taildrive rule, check sign-in expiry for every device, and revoke a pending share. A community skill for Tailscale, not made by or affiliated with Tailscale Inc.
+description: Tailscale workflows for personal Macs/devices with safety tiers. Use when routing traffic through home, sending files, fixing or setting up a Mac remotely, sharing localhost, checking slow/offline machines, coordinating agents, reaching printers/NAS, granting scoped contractor access, using one-word shortcuts, clipboard handoff, or optional tailscale-pp-cli admin actions.
 license: MIT
 ---
 
