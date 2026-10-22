@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Stop hook (Claude Code and Codex): turn localhost links into working tailnet links, with no agent involved.
 
-When the agent's final reply links to http(s)://localhost, 127.0.0.1, 0.0.0.0 or [::1] outside a code block,
+When the agent's final reply links to http://localhost, 127.0.0.1, 0.0.0.0 or [::1] outside a code block,
 this runs tailnet-url for each link itself (share over Tailscale Serve, check it loads) and shows the user the
 working links under the reply as a hook message. It never blocks the reply and never asks the agent to do
 anything. It does nothing on a computer without Tailscale.
@@ -17,7 +17,8 @@ import sys
 SCRIPT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "scripts", "tailnet-url"))
 MAC_CLI = "/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 FENCE = re.compile(r"(```|~~~).*?(\1|\Z)", re.S)
-LOCAL_URL = re.compile(r"https?://(?:localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])(?::(\d{1,5}))?(/[^\s)>\]\"'`]*)?",
+# http:// only (tailnet-url proxies plain HTTP); the host must end there, so localhost.example.com doesn't match
+LOCAL_URL = re.compile(r"http://(?:localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])(?![\w.-])(?::(\d{1,5}))?(/[^\s)>\]\"'`]*)?",
                        re.I)
 
 
@@ -26,7 +27,7 @@ def localhost_links(text):
     prose = FENCE.sub(" ", text or "")
     found = []
     for m in LOCAL_URL.finditer(prose):
-        port = m.group(1) or ("443" if m.group(0).lower().startswith("https") else "80")
+        port = m.group(1) or "80"
         found.append((m.group(0), port, m.group(2) or "/"))
     return found
 

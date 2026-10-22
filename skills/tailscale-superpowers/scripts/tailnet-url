@@ -62,13 +62,15 @@ def main():
     config = json.loads(tailscale("serve", "status", "--json") or "{}") or {}
     web = config.get("Web", {})
     target = f"http://127.0.0.1:{port}"
+    funnel = config.get("AllowFunnel") or {}
     existing = [host_port for host_port, value in web.items()
                 if value.get("Handlers", {}).get("/", {}).get("Proxy") == target
-                and config.get("TCP", {}).get(host_port.rsplit(":", 1)[-1], {}).get("HTTPS")]
+                and config.get("TCP", {}).get(host_port.rsplit(":", 1)[-1], {}).get("HTTPS")
+                and not funnel.get(host_port)]  # a Funnel share is public; never hand that out
     if existing:
         external = int(existing[0].rsplit(":", 1)[-1])
     else:
-        occupied = {int(item.rsplit(":", 1)[-1]) for item in web}
+        occupied = {int(item.rsplit(":", 1)[-1]) for item in web} | {int(p) for p in config.get("TCP", {})}
         external = port if port not in occupied else next(
             candidate for candidate in range(18000, 19000) if candidate not in occupied)
         tailscale("serve", "--bg", f"--https={external}", target)

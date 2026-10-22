@@ -38,7 +38,8 @@ def run(payload, tailscale=True):
 
 # Detection
 assert guard.localhost_links("Open http://localhost:3000/dash to see it.") == [("http://localhost:3000/dash", "3000", "/dash")]
-assert [p for _, p, _ in guard.localhost_links("http://127.0.0.1:8787 and https://0.0.0.0:5173")] == ["8787", "5173"]
+assert [p for _, p, _ in guard.localhost_links("http://127.0.0.1:8787 and http://0.0.0.0:5173")] == ["8787", "5173"]
+assert guard.localhost_links("Docs at http://localhost.example.com/ and https://localhost:5173/") == []  # not loopback / not http
 assert guard.localhost_links("Config:\n```\nproxy: http://localhost:3000\n```\nDone.") == []
 assert guard.localhost_links("The server binds to 127.0.0.1 only.") == []
 assert guard.localhost_links("See https://laptop.your-tailnet.ts.net:3000/") == []

@@ -18,9 +18,9 @@ Talk to the user in plain English. Define tailnet, exit node, SSH, and relay the
 
 Every command in the recipes is labeled with one of these. Follow the tier even when the user sounds sure.
 
-**Run freely.** Read-only: `tailscale status` (including `--json`), `ping`, `netcheck`, `ip`, `whois`, `whoami`, `version` (including `--upstream`), `get`, `dns status`, `exit-node list`, `exit-node suggest`, `serve status`, `funnel status`, `file cp --targets`, `file get` into a folder the user named, and `scripts/check-all-macs.py`. Also the look-only helpers the recipes use: `nc -z` port checks, `ssh -G`, `ippfind`, `lpstat`, `who`, `tmux ls`, and `defaults read`. From `tailscale-pp-cli`: `doctor`, `devices expiry`, `devices inspect`, `routes overview`, `shares audit`, `access check`, `policy restore --list`, and the write commands below when run without `--yes`, which only print a plan.
+**Run freely.** Read-only: `tailscale status` (including `--json`), `ping`, `netcheck`, `ip`, `whois`, `whoami`, `version` (including `--upstream`), `get`, `dns status`, `exit-node list`, `exit-node suggest`, `serve status`, `funnel status`, `file cp --targets`, `file get` into a folder the user named, and `scripts/check-all-macs.py`. Also the look-only helpers the recipes use: `nc -z` port checks, `ssh -G`, `ippfind`, `lpstat`, `who`, `tmux ls`, and `defaults read`. From `tailscale-pp-cli`: `doctor`, `devices expiry`, `devices inspect`, `routes overview`, `shares audit`, `access check`, `policy restore --list`, the plan-first write commands below when run without `--yes`, which only print a plan, and any `tailscale-pp-cli` command run with `--dry-run`.
 
-**Ask first.** Show the exact command and wait for a yes: set or clear an exit node, send a file, `serve`, SSH into the user's own machine, offer or stop offering a home network range (`--advertise-routes`), add or remove a printer, add an SSH key, edit `~/.ssh/config` or `~/.zshrc`, and switch Taildrive's hidden setting on or off.
+**Ask first.** Show the exact command and wait for a yes: set or clear an exit node, send a file, `serve`, SSH into the user's own machine, offer or stop offering a home network range (`--advertise-routes`), add or remove a printer, add an SSH key, edit `~/.ssh/config` or `~/.zshrc`, switch Taildrive's hidden setting on or off, and the three Services commands in `tailscale-pp-cli` (`tailnet services update`, `update-device-approval` and `delete`), each previewed with `--dry-run` first.
 
 **Ask first and name the risk.** Show the command, say the risk in one sentence, then wait for a yes: `funnel` (public internet), `down` or `logout`, turning on Remote Login or Screen Sharing, giving anyone else a way into the user's Mac, anything on another person's device, and anything that could cut the connection you're using. If you reach this machine over SSH or Tailscale, changing its exit node or running `down` can lock you out. From `tailscale-pp-cli`, any of these with `--yes`: `routes approve`, `routes unapprove`, `shares revoke`, `policy add-entry`, and `policy restore`. Run the command without `--yes` first, show the user the plan, say the risk, then run it again with `--yes`.
 
@@ -54,7 +54,7 @@ Which Mac app it is matters. If `/Applications/Tailscale.app/Contents/_MASReceip
 
 ## Optional: the admin CLI
 
-`tailscale-pp-cli` is a separate, open-source command-line tool for Tailscale's admin API, published in the [Printing Press library](https://github.com/mvanhorn/printing-press-library/tree/main/library/cloud/tailscale). It isn't made by Tailscale either. With it, the agent can approve a route or exit node, add a Taildrive rule, check sign-in expiry for every device, and revoke a pending share, with a plan before anything changes.
+`tailscale-pp-cli` is a separate, open-source command-line tool for Tailscale's admin API, published in the [Printing Press library](https://github.com/mvanhorn/printing-press-library/tree/main/library/cloud/tailscale). It isn't made by Tailscale either. With it, the agent can approve a route or exit node, add a Taildrive rule, check sign-in expiry for every device, revoke a pending share, and give an always-on app a stable name (Tailscale Services, see [links-not-localhost.md](references/links-not-localhost.md)), with a plan before anything changes. Install it when a recipe needs an admin step and the user would rather the agent did it.
 
 Check whether it's installed (run freely): `command -v tailscale-pp-cli`.
 
@@ -70,7 +70,7 @@ It needs an API access token. The user creates one in the admin console under **
 
 How it stays safe:
 
-- Every write command prints a plan and changes nothing until you add `--yes`.
+- Its plan-first commands (routes, policy, shares) print a plan and change nothing until you add `--yes`. The Services commands run straight away, so preview each one with `--dry-run`.
 - Approving or removing a route keeps every other route the device already has.
 - A policy change is checked by Tailscale first, saved as a local backup, shown as a diff, and refused if someone else changed the policy in between.
 

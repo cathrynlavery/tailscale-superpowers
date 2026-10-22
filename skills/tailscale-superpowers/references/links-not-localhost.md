@@ -40,11 +40,11 @@ If port 3000 on the tailnet side is already taken by something else, it picks a 
 
 Safety tier: **ask first**, because it runs `tailscale serve`. If the user has said they always want tailnet links (for example, a standing instruction in their agent rules), that counts as the yes.
 
-Undo (ask first): `tailscale serve --https=<port> off`, using the port in the printed link.
+Undo (ask first): `tailscale serve --https=<port> off`, using the port in the printed link. If the link was already shared before you ran the script, it was reused, so leave it on.
 
 ## 2. The hook
 
-The hook reads the agent's final reply. If it finds an `http://` or `https://` link to `localhost`, `127.0.0.1`, `0.0.0.0` or `[::1]` outside a code block, it runs `tailnet-url` for each one itself and shows you the result under the reply:
+The hook reads the agent's final reply. If it finds an `http://` link to `localhost`, `127.0.0.1`, `0.0.0.0` or `[::1]` outside a code block, it runs `tailnet-url` for each one itself and shows you the result under the reply:
 
 ```text
 Tailnet link for http://localhost:3000/: https://laptop.your-tailnet.ts.net:3000/
@@ -78,19 +78,63 @@ Undo: remove the entry from the settings file.
 
 ## 3. Stable names (optional)
 
-Port links are fine for quick previews. For something that's always running, like a dashboard or a review page, a name is easier to remember. Tailscale Services gives a service its own name on your tailnet, with a certificate:
+Port links are fine for quick previews. For something that's always running, like a dashboard, a name is easier to remember: `https://dashboard.your-tailnet.ts.net`. Tailscale Services gives it that name with a real certificate, and the app stays on `127.0.0.1`.
+
+One catch: a Service has to be hosted by a tagged device, and your own Mac is signed in as you. Rather than tagging it, run a second small Tailscale node next to the app whose only job is hosting Services.
+
+**One-time setup.** Steps 1 and 2 are the user's, in the admin console:
+
+1. **Access controls**: add a tag for the node: `"tagOwners": {"tag:svc": ["autogroup:admin"]},`
+2. **Settings, Keys, Generate auth key**: one-off, pre-approved, tag `tag:svc`. Save it to a file only you can read, such as `services.key`.
+3. Install open-source Tailscale into its own folder, so it can't clash with the Tailscale app. It needs Go. Ask first:
+
+   ```sh
+   GOBIN=~/.local/share/tailscale-services/bin go install tailscale.com/cmd/tailscale@latest tailscale.com/cmd/tailscaled@latest
+   ```
+
+4. Keep it running with launchd, with its own state, socket and port. Like the Tailscale app, it runs while you are logged in. Save this as `~/Library/LaunchAgents/tailscale-services.plist`, with your home folder in place of `/Users/you`, then load it. Ask first:
+
+   ```xml
+   <?xml version="1.0" encoding="UTF-8"?>
+   <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+   <plist version="1.0"><dict>
+     <key>Label</key><string>tailscale-services</string>
+     <key>ProgramArguments</key><array>
+       <string>/Users/you/.local/share/tailscale-services/bin/tailscaled</string>
+       <string>--tun=userspace-networking</string>
+       <string>--statedir=/Users/you/.local/share/tailscale-services/state</string>
+       <string>--socket=/Users/you/.local/share/tailscale-services/tailscaled.sock</string>
+       <string>--port=41642</string>
+     </array>
+     <key>RunAtLoad</key><true/>
+     <key>KeepAlive</key><true/>
+   </dict></plist>
+   ```
+
+   ```sh
+   launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/tailscale-services.plist
+   S=~/.local/share/tailscale-services
+   $S/bin/tailscale --socket=$S/tailscaled.sock up --auth-key=file:services.key --hostname=services --advertise-tags=tag:svc && rm services.key
+   ```
+
+**Each name.** Ask first. The first and last commands use the [admin CLI](../SKILL.md#optional-the-admin-cli); run each with `--dry-run` first to see the request:
 
 ```sh
-tailscale serve --service=svc:dashboard --https=443 127.0.0.1:8080
+S=~/.local/share/tailscale-services
+tailscale-pp-cli tailnet services update svc:dashboard --name svc:dashboard --ports tcp:443
+$S/bin/tailscale --socket=$S/tailscaled.sock serve --bg --service=svc:dashboard --https=443 http://127.0.0.1:8080
+tailscale-pp-cli tailnet services update-device-approval svc:dashboard <node-id> --approved
 ```
 
-After the user approves the service once in the admin console, it's reachable at `https://dashboard.your-tailnet.ts.net` from any device on the tailnet. The app itself stays on `127.0.0.1`. Safety tier: ask first, and the approval is the user's step.
+`<node-id>` is the services node's `nodeId` from `tailscale-pp-cli tailnet devices list`. After that, `https://dashboard.your-tailnet.ts.net` opens on every device on your tailnet. Tailscale still passes the visitor's identity headers, such as `Tailscale-User-Login`, so apps that check who's visiting keep working. If your access policy isn't the default allow-all, also grant access in it: `{"src": ["autogroup:member"], "dst": ["svc:dashboard"], "ip": ["tcp:443"]}`. Check the name opens from another device. Without the CLI, define and approve the service on the admin console's Services page instead.
 
-Some people do the same thing with their own domain: split DNS in the tailnet settings sends `*.internal.example` to one machine, and Caddy on that machine routes each name to the right local port. It's more to run (a DNS server, Caddy, and certificates for your domain), so use it when you want your own names; Tailscale Services covers most people.
+Undo (ask first): `$S/bin/tailscale --socket=$S/tailscaled.sock serve clear svc:dashboard`, then `tailscale-pp-cli tailnet services delete svc:dashboard`.
+
+Some people get names with their own domain instead: split DNS sends `*.internal.example` to one machine, and Caddy there routes each name to a local port. That means running a DNS server, Caddy and certificates for your domain, so use it when you want your own domain.
 
 ## When it goes wrong
 
 - **`nothing is loading on local port 3000`**: the app isn't running, or it's on a different port. Start it, or check the port.
 - **`Tailscale link did not load`**: the mapping was made but the link didn't answer. Check `tailscale serve status`, and that HTTPS certificates are turned on.
 - **`Tailscale CLI not found`**: on a Mac, the app's CLI is at `/Applications/Tailscale.app/Contents/MacOS/Tailscale`. The script finds it there automatically; otherwise add `tailscale` to PATH.
-- **The hook keeps stopping a reply that only mentions localhost in passing**: put the address in a code block, or drop the `http://`. The hook only acts on full links.
+- **The hook shows a link for an address that was only mentioned in passing**: put the address in a code block, or drop the `http://`. The hook only acts on full links.
