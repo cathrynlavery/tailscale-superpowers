@@ -18,6 +18,15 @@ The one I use most:
 
 > Hotel/airplane wifi sketchy or slow? I route all my traffic through my house in Austin with one tap.
 
+## No more localhost links
+
+Agents love to hand you `http://localhost:3000`, which only opens on the computer running it. This skill fixes that without a rule in your AGENTS.md:
+
+- `tailnet-url 3000` shares the app on your tailnet, checks the link loads, and prints it.
+- A hook for Claude Code and Codex catches any localhost link left in a reply, makes the tailnet link itself, and shows it under the reply. Your agent doesn't have to remember anything.
+
+Setup: [Tailnet links, never localhost](skills/tailscale-superpowers/references/links-not-localhost.md). Or tell your agent "Install the localhost hook from Tailscale Superpowers."
+
 ## What you can ask
 
 Once it's installed, say things like:
@@ -30,6 +39,7 @@ Once it's installed, say things like:
 - "Set it up so I can type `mini` to get into the Mac mini."
 - "Put this link on my partner's clipboard." (With their OK.)
 - "Approve the exit node on the Mac mini." (With the optional admin CLI.)
+- "Install the localhost hook so I always get tailnet links."
 
 ## What's inside
 
