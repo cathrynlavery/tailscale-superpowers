@@ -1,6 +1,6 @@
 ---
 name: tailscale-superpowers
-description: Tailscale workflows for personal Macs/devices with safety tiers. Use when routing traffic through home, sending files, fixing or setting up a Mac remotely, sharing localhost, checking slow/offline machines, coordinating agents, reaching printers/NAS, granting scoped contractor access, using one-word shortcuts, clipboard handoff, or optional tailscale-pp-cli admin actions.
+description: Tailscale workflows for personal Macs/devices with safety tiers. Use when routing traffic through home, sending files, fixing or setting up a Mac remotely, sharing localhost, replacing localhost links with tailnet links (tailnet-url, localhost hook), checking slow/offline machines, coordinating agents, reaching printers/NAS, granting scoped contractor access, using one-word shortcuts, clipboard handoff, or optional tailscale-pp-cli admin actions.
 license: MIT
 ---
 
