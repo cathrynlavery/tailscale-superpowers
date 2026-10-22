@@ -33,7 +33,7 @@ Once it's installed, say things like:
 
 ## What's inside
 
-Sixteen recipes. Each one covers when you'd want it, the exact commands, what success looks like, how to undo it, and what the common errors mean.
+Seventeen recipes. Each one covers when you'd want it, the exact commands, what success looks like, how to undo it, and what the common errors mean.
 
 **Away from home**
 
@@ -52,6 +52,7 @@ Sixteen recipes. Each one covers when you'd want it, the exact commands, what su
 | [Shared folders](skills/tailscale-superpowers/references/shared-folders.md) | Share a folder between your Macs with Taildrive, and when Dropbox is the better fit |
 | [Paste on another Mac](skills/tailscale-superpowers/references/paste-to-another-mac.md) | Put text on another Mac's clipboard with one command |
 | [Open a laptop site on your phone](skills/tailscale-superpowers/references/open-site-on-phone.md) | Share a local site with your own devices only |
+| [Tailnet links, never localhost](skills/tailscale-superpowers/references/links-not-localhost.md) | A script turns a local port into a working tailnet link, and a hook sends back any agent reply that contains a localhost link |
 | [Public demo](skills/tailscale-superpowers/references/public-demo.md) | Put a local site on the internet for a demo, then turn it off |
 
 **Running your Macs**
@@ -87,6 +88,8 @@ Every change comes with its undo, shown before the change runs. The full rules a
 ## Tested on a real network
 
 Before release, the recipes were run against a real tailnet with Tailscale 1.102.4 on macOS 27. Files went between Macs, a site was served privately and then made public, an exit node was switched on and off, and a home printer and router answered from a Mac outside the home network. Where a test showed the docs were out of date, the recipe now says what actually happens. Steps that need a phone or a second person's Tailscale account weren't run, and Taildrive was switched on and checked but no folder was opened from a second Mac yet.
+
+The localhost recipe was added later and tested on Tailscale 1.102.4 on macOS 27. `tailnet-url` reused an existing share and created a new one, and both links loaded. With the hook installed, a Claude Code agent asked to reply with a localhost link came back with the tailnet link instead. The Codex hook was installed and approved but not run end to end. The stable-names section (Tailscale Services) wasn't tested.
 
 ## Install
 

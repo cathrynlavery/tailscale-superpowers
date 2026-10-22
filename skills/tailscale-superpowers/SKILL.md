@@ -76,6 +76,10 @@ How it stays safe:
 
 `self` means this machine. No CLI, or no token? Use the admin console steps in each recipe.
 
+## Links to things on this computer
+
+Never give the user a `localhost` link; it only opens on this machine. Run `scripts/tailnet-url <port> [path]` and give them the link it prints. Where the `localhost-guard` hook is installed, it stops replies that contain localhost links and sends them back with the exact command to run. Setup and stable names: [links-not-localhost.md](references/links-not-localhost.md).
+
 ## Recipes
 
 - [travel-wifi.md](references/travel-wifi.md): hotel or plane wifi you don't trust. Send your traffic through your home Mac.
@@ -83,6 +87,7 @@ How it stays safe:
 - [help-family-mac.md](references/help-family-mac.md): help fix a family member's Mac over SSH, with their consent.
 - [new-mac-setup.md](references/new-mac-setup.md): install Tailscale on a new Mac, then let an agent finish the setup.
 - [open-site-on-phone.md](references/open-site-on-phone.md): open a site running on your laptop from your phone.
+- [links-not-localhost.md](references/links-not-localhost.md): make agents give tailnet links instead of localhost, with a script, a hook, and optional stable names.
 - [public-demo.md](references/public-demo.md): share a local site publicly for a demo, then turn it off.
 - [is-it-online.md](references/is-it-online.md): is my other Mac online, and why is it slow?
 - [agents-talk.md](references/agents-talk.md): let agents on different machines ask each other for help.
