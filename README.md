@@ -90,7 +90,15 @@ Before release, the recipes were run against a real tailnet with Tailscale 1.102
 
 ## Install
 
-The skill is the `skills/tailscale-superpowers` folder. It follows the [Agent Skills](https://agentskills.io/specification) format, so it works in any agent that reads `SKILL.md` files. Copy that folder into your agent's skills folder:
+One line, for every agent on your Mac:
+
+```sh
+npx skills add cathrynlavery/tailscale-superpowers -g
+```
+
+It asks which agents to install for (Claude Code, Codex, Cursor and others). `-g` installs it for your user account, so it works in every project. Leave `-g` off to install it only in the current project. To pick agents up front, add `--agent claude-code codex`.
+
+Or copy it by hand. The skill is the `skills/tailscale-superpowers` folder. It follows the [Agent Skills](https://agentskills.io/specification) format, so it works in any agent that reads `SKILL.md` files. Copy that folder into your agent's skills folder:
 
 | Agent | Personal skills folder |
 | --- | --- |
@@ -99,8 +107,6 @@ The skill is the `skills/tailscale-superpowers` folder. It follows the [Agent Sk
 | Cursor | `~/.agents/skills/` or `~/.cursor/skills/` |
 | Pi | `~/.agents/skills/` |
 | Hermes | `~/.hermes/skills/` |
-
-<!-- TODO(Cathryn): add the one-line install once it's tested: npx skills add <owner>/tailscale-superpowers -->
 
 ## Optional: let your agent do the admin steps
 
