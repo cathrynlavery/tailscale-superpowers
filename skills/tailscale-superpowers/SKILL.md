@@ -78,7 +78,7 @@ How it stays safe:
 
 ## Links to things on this computer
 
-Never give the user a `localhost` link; it only opens on this machine. Run `scripts/tailnet-url <port> [path]` and give them the link it prints. Where the `localhost-guard` hook is installed, it stops replies that contain localhost links and sends them back with the exact command to run. Setup and stable names: [links-not-localhost.md](references/links-not-localhost.md).
+Never give the user a `localhost` link; it only opens on this machine. Run `scripts/tailnet-url <port> [path]` and give them the link it prints. Where the `localhost-guard` hook is installed, it does this itself: any localhost link left in a reply gets a working tailnet link shown under it, with no agent step. Setup and stable names: [links-not-localhost.md](references/links-not-localhost.md).
 
 ## Recipes
 

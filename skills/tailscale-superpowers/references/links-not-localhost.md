@@ -4,10 +4,10 @@
 
 You work across a few computers and your phone. An agent finishes something and says "open http://localhost:3000". That link only works on the machine running the app, so from your laptop or phone it's a dead end.
 
-You could add a line to AGENTS.md asking for Tailscale links. That works until an agent forgets. This recipe makes it automatic instead:
+You could add a line to AGENTS.md asking for Tailscale links. That works until an agent forgets. This recipe doesn't depend on the agent at all:
 
 1. **`tailnet-url`**, a script that turns a local port into a working tailnet link in one step.
-2. **`localhost-guard`**, a hook that stops an agent's reply if it contains a localhost link and sends it back to fix the link.
+2. **`localhost-guard`**, a hook that runs when an agent finishes a reply. If the reply has a localhost link, the hook makes the tailnet link itself and shows it to you under the reply.
 3. Optional: **a stable name** like `https://preview.your-tailnet.ts.net` for apps that are always running.
 
 A few words first:
@@ -44,9 +44,15 @@ Undo (ask first): `tailscale serve --https=<port> off`, using the port in the pr
 
 ## 2. The hook
 
-The hook reads the agent's final reply. If it finds an `http://` or `https://` link to `localhost`, `127.0.0.1`, `0.0.0.0` or `[::1]` outside a code block, it stops the reply and tells the agent exactly which `tailnet-url` command to run for each link. The agent swaps in the tailnet link and finishes. It blocks once per reply, so it can't loop, and it does nothing on a computer without Tailscale.
+The hook reads the agent's final reply. If it finds an `http://` or `https://` link to `localhost`, `127.0.0.1`, `0.0.0.0` or `[::1]` outside a code block, it runs `tailnet-url` for each one itself and shows you the result under the reply:
 
-Code blocks are left alone, because config files and examples legitimately contain `localhost`.
+```text
+Tailnet link for http://localhost:3000/: https://laptop.your-tailnet.ts.net:3000/
+```
+
+If nothing is running on that port, the line says so instead. The agent isn't asked to do anything, and the reply isn't held up. The hook does nothing on a computer without Tailscale, and it leaves code blocks alone, because config files and examples legitimately contain `localhost`.
+
+Because the hook shares the port for you, installing it counts as the user's standing yes for `tailnet-url` on that computer.
 
 Install it for Claude Code by adding this to `~/.claude/settings.json`, merged into any `hooks` you already have. Use the path where the skill is installed:
 
@@ -54,7 +60,7 @@ Install it for Claude Code by adding this to `~/.claude/settings.json`, merged i
 {
   "hooks": {
     "Stop": [
-      { "hooks": [ { "type": "command", "command": "python3 \"$HOME/.claude/skills/tailscale-superpowers/hooks/localhost-guard.py\"", "timeout": 10 } ] }
+      { "hooks": [ { "type": "command", "command": "python3 \"$HOME/.claude/skills/tailscale-superpowers/hooks/localhost-guard.py\"", "timeout": 30 } ] }
     ]
   }
 }

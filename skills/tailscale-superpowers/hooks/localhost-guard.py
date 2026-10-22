@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
-"""Stop hook (Claude Code and Codex): don't let an agent hand the user a localhost link.
+"""Stop hook (Claude Code and Codex): turn localhost links into working tailnet links, with no agent involved.
 
 When the agent's final reply links to http(s)://localhost, 127.0.0.1, 0.0.0.0 or [::1] outside a code block,
-this exits 2 with instructions, which both tools treat as "keep going": the agent runs tailnet-url for each
-port and swaps in the Tailscale link. It blocks once per reply (stop_hook_active), and does nothing on a machine
-without Tailscale, where the script couldn't work anyway.
+this runs tailnet-url for each link itself (share over Tailscale Serve, check it loads) and shows the user the
+working links under the reply as a hook message. It never blocks the reply and never asks the agent to do
+anything. It does nothing on a computer without Tailscale.
 """
 
 import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 
 SCRIPT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "scripts", "tailnet-url"))
@@ -53,16 +54,25 @@ def last_message(payload):
     return last
 
 
-def reason(links):
-    lines = ["Your reply links to localhost, which only opens on this computer. The user works across several "
-             "devices, so replace each link below with the Tailscale link this prints, then send the reply again:"]
-    seen = set()
+def share(port, path):
+    """Run tailnet-url; return (link, None) or (None, error)."""
+    try:
+        r = subprocess.run([sys.executable, SCRIPT, port, path], capture_output=True, text=True, timeout=25)
+    except subprocess.TimeoutExpired:
+        return None, "timed out"
+    if r.returncode == 0 and r.stdout.strip():
+        return r.stdout.strip(), None
+    return None, (r.stderr.strip() or "failed").replace("tailnet-url: ", "")
+
+
+def message(links):
+    lines, seen = [], set()
     for url, port, path in links:
         if (port, path) in seen:
             continue
         seen.add((port, path))
-        lines.append(f"- {url}  ->  run: {SCRIPT} {port} {path}")
-    lines.append("If tailnet-url fails, say the link couldn't be verified instead of giving a localhost one.")
+        link, err = share(port, path)
+        lines.append(f"Tailnet link for {url}: {link}" if link else f"No tailnet link for {url} ({err})")
     return "\n".join(lines)
 
 
@@ -71,15 +81,12 @@ def main():
         payload = json.load(sys.stdin)
     except ValueError:
         return 0
-    if payload.get("stop_hook_active"):
-        return 0
     if not (shutil.which("tailscale") or os.path.exists(MAC_CLI)):
         return 0
     links = localhost_links(last_message(payload))
-    if not links:
-        return 0
-    print(reason(links), file=sys.stderr)
-    return 2
+    if links:
+        print(json.dumps({"systemMessage": message(links)}))
+    return 0
 
 
 if __name__ == "__main__":
