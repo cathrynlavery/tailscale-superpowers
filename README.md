@@ -43,7 +43,7 @@ Once it's installed, say things like:
 
 ## What's inside
 
-Seventeen recipes. Each one covers when you'd want it, the exact commands, what success looks like, how to undo it, and what the common errors mean.
+Nineteen recipes. Each one covers when you'd want it, the exact commands, what success looks like, how to undo it, and what the common errors mean.
 
 **Away from home**
 
@@ -60,6 +60,7 @@ Seventeen recipes. Each one covers when you'd want it, the exact commands, what 
 | --- | --- |
 | [Send a file](skills/tailscale-superpowers/references/send-a-file.md) | Send a file to your phone or another Mac with Taildrop |
 | [Shared folders](skills/tailscale-superpowers/references/shared-folders.md) | Share a folder between your Macs with Taildrive, and when Dropbox is the better fit |
+| [Files from someone else](skills/tailscale-superpowers/references/files-from-someone-else.md) | Get files a friend shares over Tailscale, and what changes when your Mac joins their tailnet |
 | [Paste on another Mac](skills/tailscale-superpowers/references/paste-to-another-mac.md) | Put text on another Mac's clipboard with one command |
 | [Open a laptop site on your phone](skills/tailscale-superpowers/references/open-site-on-phone.md) | Share a local site with your own devices only |
 | [Tailnet links, never localhost](skills/tailscale-superpowers/references/links-not-localhost.md) | A script turns a local port into a working tailnet link, and a hook shows that link under any agent reply that still has a localhost one |
@@ -81,6 +82,7 @@ Seventeen recipes. Each one covers when you'd want it, the exact commands, what 
 | --- | --- |
 | [Contractor access](skills/tailscale-superpowers/references/contractor-access.md) | Give someone access to one Mac, then take it away |
 | [Help a family member's Mac](skills/tailscale-superpowers/references/help-family-mac.md) | Fix their Mac over SSH, with their consent and every change approved |
+| [Who can reach my Macs](skills/tailscale-superpowers/references/who-can-reach-my-macs.md) | Check whether a person can connect to your Macs, starting from each Mac's peer list |
 
 ## How it keeps your agent in line
 
@@ -100,6 +102,8 @@ Every change comes with its undo, shown before the change runs. The full rules a
 Before release, the recipes were run against a real tailnet with Tailscale 1.102.4 on macOS 27. Files went between Macs, a site was served privately and then made public, an exit node was switched on and off, and a home printer and router answered from a Mac outside the home network. Where a test showed the docs were out of date, the recipe now says what actually happens. Steps that need a phone or a second person's Tailscale account weren't run, and Taildrive was switched on and checked but no folder was opened from a second Mac yet.
 
 The localhost recipe was added later and tested on Tailscale 1.102.4 on macOS 27. `tailnet-url` reused an existing share and created a new one, and both links loaded. With the hook installed, agents told to reply with a localhost link kept their reply as written, and the working tailnet link appeared under it: in Claude Code (headless) and in Codex (interactive, on screen). `codex exec` runs the hook but doesn't print hook messages. The stable-names section (Tailscale Services) wasn't tested.
+
+The recipes for files from someone else and who can reach your Macs came from a real case. A Taildrive folder shared from another person's tailnet was listed and copied from a device signed into that tailnet, and the audit steps were run against two real tailnets. Switching a Mac to another account and opening the share in Finder weren't tested.
 
 ## Install
 
