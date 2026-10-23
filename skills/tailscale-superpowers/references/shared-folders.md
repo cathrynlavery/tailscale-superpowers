@@ -63,7 +63,7 @@ On the **Access controls** page, the user adds these two blocks from Tailscale's
 ]
 ```
 
-As written, every device on the tailnet can read and write every share. That's fine when the tailnet is only you. If other people are on it, ask Tailscale's official skill or docs for a narrower rule first.
+As written, every device on the tailnet can read and write every share. That's fine when the tailnet is only you. If other people are on it, ask Tailscale's official skill or docs for a narrower rule first. For a folder someone else is sharing with you, see [files-from-someone-else.md](files-from-someone-else.md).
 
 Undo: the user removes those entries.
 

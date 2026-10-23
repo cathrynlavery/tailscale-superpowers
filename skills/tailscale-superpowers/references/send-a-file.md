@@ -9,7 +9,7 @@ You want a PDF from your laptop on your phone, or a log file from one Mac on ano
 The user handles these:
 
 - Taildrop is an alpha feature, so it's off until the tailnet owner turns on **Send Files** in the admin console's General settings. The agent doesn't do this.
-- It only sends between devices signed in as you. You can't send to someone else's device, even on the same tailnet.
+- It only sends between devices signed in as you. You can't send to someone else's device, even on the same tailnet. To swap files with another person, see [files-from-someone-else.md](files-from-someone-else.md).
 
 ## Steps
 
