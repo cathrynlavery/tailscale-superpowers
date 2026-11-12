@@ -40,6 +40,7 @@ Once it's installed, say things like:
 - "Put this link on my partner's clipboard." (With their OK.)
 - "Approve the exit node on the Mac mini." (With the optional admin CLI.)
 - "Install the localhost hook so I always get tailnet links."
+- "Put all my Macs in Screen Sharing so I can connect from anywhere."
 
 ## What's inside
 
@@ -51,7 +52,7 @@ Nineteen recipes. Each one covers when you'd want it, the exact commands, what s
 | --- | --- |
 | [Travel wifi](skills/tailscale-superpowers/references/travel-wifi.md) | Send all your traffic through your home Mac when the wifi is sketchy |
 | [Home printer and network drive](skills/tailscale-superpowers/references/home-network.md) | Reach devices at home that can't run Tailscale, from anywhere |
-| [See the screen](skills/tailscale-superpowers/references/see-the-screen.md) | Use your home Mac's screen from your laptop with Screen Sharing |
+| [See the screen](skills/tailscale-superpowers/references/see-the-screen.md) | Use your home Mac's screen from your laptop with Screen Sharing, and list every Mac on your tailnet in Screen Sharing or Screens 5 |
 | [Agents from your phone](skills/tailscale-superpowers/references/agents-from-phone.md) | Check on an agent running on your home Mac from your phone |
 
 **Moving things around**
