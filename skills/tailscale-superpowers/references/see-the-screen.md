@@ -46,6 +46,44 @@ The user does this, at the home Mac. It's ask first and name the risk: "Anyone w
 
 A window showing the home Mac's screen. Your clicks and typing go to the home Mac.
 
+## Put every Mac in the Screen Sharing list
+
+The Screen Sharing app only lists Macs you've connected to before, and often by a home-only name like `home-mac.local`. To list every Mac on the tailnet by its full tailnet name, so each one works from anywhere:
+
+1. Preview. Run freely:
+
+   ```sh
+   scripts/screen-sharing-list.py
+   ```
+
+   It prints one `add` line for each online Mac that has Screen Sharing on (port 5900 answers) and isn't listed yet. Add `--user home-mac=alex` to fill in the login name, and `--skip home-mac` to leave a machine out, for example a server you never screen-share to.
+
+2. Write. Ask first. Quit Screen Sharing first; it overwrites the list when it quits.
+
+   ```sh
+   scripts/screen-sharing-list.py --yes --user home-mac=alex
+   ```
+
+   It backs up the settings file first and prints the backup path. Undo: copy that backup over `~/Library/Containers/com.apple.ScreenSharing/Data/Library/Preferences/com.apple.ScreenSharing.plist` while the app is quit.
+
+An entry saved as `home-mac.local` or a raw `100.x` address only works on the home network or until the address changes. Replace it with the tailnet name. Offline Macs aren't added; run it again when they're on.
+
+## Screens 5 (Edovia)
+
+Screens 5's own Tailscale section lists Macs by asking `api.tailscale.com`. Some Wi-Fi networks and DNS filters block that address. Check it. Run freely:
+
+```sh
+dig +short api.tailscale.com
+```
+
+`0.0.0.0` means it's blocked, and Screens shows "No Registered Computers" under Tailscale. Saved Links don't depend on the API, because the Mac's own Tailscale resolves the tailnet name. To add one, ask first:
+
+```sh
+open -a "Screens 5" "vnc://alex@home-mac.your-tailnet.ts.net"
+```
+
+Screens saves the address under Links right away and opens a password prompt. The user types the password or cancels; the agent never touches it. Do this once per Mac. Opening a `.screens` archive with `open` did not import anything in testing, so use the links instead.
+
 ## From your phone or iPad
 
 Apple doesn't make a Screen Sharing app for iPhone or iPad. A VNC app from the App Store, such as Screens, can connect to `home-mac` while Tailscale is on.
@@ -65,4 +103,14 @@ The same steps work for a family member's Mac, but everything moves to the "ask 
 - **`tailscale ping` says `no reply`**: the home Mac is asleep, off, or Tailscale isn't running on it. See [is-it-online.md](is-it-online.md).
 - **The home Mac restarted and now can't be reached**: the App Store and Standalone Tailscale apps only start after someone logs in at the Mac. Until somebody does, it's off the tailnet.
 - **The password is rejected**: use the username and password of an account on the home Mac, one that's on the allowed list.
+- **Remote Management rejects a correct admin password**: check its allowed-user list. An empty list can cause `not valid admin`; after the access-change approval required by the skill, grant only the intended account through Remote Management's access settings. The recorded CLI remedy is `kickstart -configure -access -on -users <user> -privs -all -restart -agent` with sudo; preview the access being granted and preserve the prior settings for undo (ERR-20261024-STUDIO36102EAF16).
 - **It's laggy**: you're probably on a relay. Run `tailscale ping home-mac` and see [is-it-online.md](is-it-online.md).
+
+If the user wants automatic login after a restart, have them enable it from the
+Mac's own System Settings > Users & Groups, in person or over Screen Sharing.
+`sysadminctl -autologin set` over SSH can set `autoLoginUser` while failing to save
+the password (`SACSetAutoLoginPassword error:22`, missing SessionAgent). Verify
+`sysadminctl -autologin status` and that `/etc/kcpassword` exists; never read or print
+that file. The `autoLoginUser` key alone does not prove automatic login works
+(ERR-20261024-STUDIO36102EAF16; related ERR-20261024-STUDIO0DAAE7BAFE,
+ERR-20261024-STUDIO8B6CBB7BE7).
